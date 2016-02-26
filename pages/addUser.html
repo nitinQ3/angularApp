@@ -1,11 +1,11 @@
 <form ng-submit="addUserForm()">
     <div class="form-group">
-        <label for="inputFirstName">Name</label>
-        <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" ng-model="form.firstName">
+        <label for="inputFirstName">First Name</label>
+        <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" ng-model="form.first_name">
     </div>
     <div class="form-group">
         <label for="inputLastName">Last Name</label>
-        <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" ng-model="form.lastName">
+        <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" ng-model="form.last_name">
     </div>
     <div class="form-group">
         <label for="inputRole">Role</label>
@@ -30,3 +30,7 @@
     </div>-->
 <button type="submit"  class="btn btn-primary">Add</button>
 </form>
+<div class="alert alert-success" ng-show="successMsg">
+    {{successMsg}}
+<!--  <strong>Success!</strong> User has been added.-->
+</div>
