@@ -1,23 +1,23 @@
-<form>
+<form ng-submit="addUserForm()">
     <div class="form-group">
         <label for="inputFirstName">Name</label>
-        <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" ng-model="firstName">
+        <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" ng-model="form.firstName">
     </div>
     <div class="form-group">
         <label for="inputLastName">Last Name</label>
-        <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" ng-model="lastName">
+        <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" ng-model="form.lastName">
     </div>
     <div class="form-group">
         <label for="inputRole">Role</label>
-        <input type="text" class="form-control" id="inputRole" placeholder="Role" ng-model="role">
+        <input type="text" class="form-control" id="inputRole" placeholder="Role" ng-model="form.role">
     </div>
     <div class="form-group">
         <label for="inputUsername">Username</label>
-        <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="username">
+        <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="form.username">
     </div>
     <div class="form-group">
         <label for="inputEmail">Email</label>
-        <input type="email" class="form-control" id="inputEmail" placeholder="Email" ng-model="email">        
+        <input type="email" class="form-control" id="inputEmail" placeholder="Email" ng-model="form.email">        
     </div>
     
 <!--    <div class="form-group">
@@ -28,5 +28,5 @@
 <!--    <div class="checkbox">
         <label><input type="checkbox"> Remember me</label>
     </div>-->
-    <button type="submit" class="btn btn-primary">Add</button>
+<button type="submit"  class="btn btn-primary">Add</button>
 </form>
