@@ -32,6 +32,13 @@ App::uses('Controller', 'Controller');
  */
 class UsersController extends AppController {  
     
+    /**
+     * 
+     * 
+     * 
+     */
+    
+    
     function addUser(){
         $this->autoRender = false;        
         if($this->request->is('post','put')){
@@ -39,6 +46,26 @@ class UsersController extends AppController {
            $data = json_decode($data, TRUE);
            $this->User->save($data);
         }
-        
     }
+    
+    /**
+     * 
+     * 
+     * 
+     */
+    
+    function userList() {
+        $this->autoRender = false;
+        $usersList = array();
+        if ($this->request->is('post', 'put')) {
+            $usersList = $this->User->find('all');
+            $cnt = count($usersList);
+            if ($cnt) { 
+                return $cnt == 1 ? json_encode(array($usersList)) : json_encode($usersList);               
+            } else {
+                return false;
+            }
+        }
+    }
+
 }
