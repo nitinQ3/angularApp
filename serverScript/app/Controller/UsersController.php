@@ -57,7 +57,7 @@ class UsersController extends AppController {
     function userList() {
         $this->autoRender = false;
         $usersList = array();
-        if ($this->request->is('post', 'put')) {
+        if ($this->request->is('get')) {
             $usersList = $this->User->find('all');
             $cnt = count($usersList);
             if ($cnt) { 
