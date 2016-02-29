@@ -16,18 +16,7 @@
             <strong>Information</strong><br>
             <div class="table-responsive">
             <table class="table table-condensed table-responsive table-user-information">
-                <tbody>
-                    <tr>        
-                        <td>
-                            <strong>
-                                <span class="glyphicon glyphicon-asterisk text-primary"></span>
-                                Identificacion                                                
-                            </strong>
-                        </td>
-                        <td class="text-primary">
-                            123456789     
-                        </td>
-                    </tr>
+                <tbody ng-repeat="userDetail in userDetails">                    
                     <tr>    
                         <td>
                             <strong>
@@ -36,7 +25,7 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                            Bootdey     
+                            {{userDetail.User.first_name  | capitalize}}     
                         </td>
                     </tr>
                     <tr>        
@@ -47,7 +36,7 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                            Bootstrap  
+                            {{userDetail.User.last_name  | capitalize}}  
                         </td>
                     </tr>
 
@@ -59,7 +48,7 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                            bootnipets 
+                            {{userDetail.User.username}} 
                         </td>
                     </tr>
 
@@ -72,7 +61,7 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                            Admin
+                            {{userDetail.User.role  | uppercase}} 
                         </td>
                     </tr>
                     <tr>        
@@ -83,7 +72,7 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                            noreply@email.com  
+                           {{userDetail.User.email}} 
                         </td>
                     </tr>
                     <tr>        
@@ -94,7 +83,7 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                            20 jul 20014
+                            {{userDetail.User.created}} 
                         </td>
                     </tr>
                     <tr>        
@@ -105,9 +94,18 @@
                             </strong>
                         </td>
                         <td class="text-primary">
-                             20 jul 20014 20:00:00
+                             {{userDetail.User.modified}} 
                         </td>
-                    </tr>                                    
+                    </tr>
+                    <tr>        
+                        <td colspan='2'>
+                            <strong>
+                                <a href="#userGrid"><button type="button" class="btn btn-success">User List</button></a>
+<!--                                Modified                                                -->
+                            </strong>
+                        </td>
+                        
+                    </tr>
                 </tbody>
             </table>
             </div>

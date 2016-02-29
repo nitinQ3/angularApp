@@ -67,5 +67,27 @@ class UsersController extends AppController {
             }
         }
     }
+    
+    /**
+     * 
+     * 
+     * 
+     */
+    
+    function userDetail($id = NULL) {
+        $this->autoRender = false;
+        $usersDetail = array();
+        if ($this->request->is('GET') && $id!=null) {
+            $usersDetail = $this->User->findById($id);
+            $cnt = count($usersDetail);
+            if ($cnt) {
+                return $cnt == 1 ? json_encode(array($usersDetail)) : json_encode($usersDetail);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 }
