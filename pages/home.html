@@ -1,1 +1,13 @@
-<div class="jumbotron">Home</div>
+<form ng-submit="userLogin()">
+    <div class="form-group">
+        <label for="inputUsername">Username</label>
+        <input type="text" class="form-control" id="inputUsername" required placeholder="Username" ng-model="form.username">
+    </div>
+    <div class="form-group">
+        <label for="inputPass"></label>
+        <input type="password" class="form-control" id="inputPassword" required placeholder="Password" ng-model="form.password">
+    </div>    
+
+<button type="submit"  class="btn btn-primary">Login</button>
+</form>
+<div ng-bind-html="successMsg | unsafe" class="alert alert-success" ng-show="successMsg"></div>

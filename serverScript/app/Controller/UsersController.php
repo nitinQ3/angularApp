@@ -60,8 +60,9 @@ class UsersController extends AppController {
         if ($this->request->is('get')) {
             $usersList = $this->User->find('all');
             $cnt = count($usersList);
-            if ($cnt) { 
-                return $cnt == 1 ? json_encode(array($usersList)) : json_encode($usersList);               
+            if ($cnt!=0) {
+               // return $cnt == 1 ? json_encode(array($usersList)) : json_encode($usersList);               
+                return json_encode($usersList);
             } else {
                 return false;
             }
