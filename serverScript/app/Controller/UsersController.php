@@ -32,19 +32,53 @@ App::uses('Controller', 'Controller');
  */
 class UsersController extends AppController {  
     
+    
+    var $components = array('Auth');
+    
     /**
      * 
      * 
      * 
      */
     
+    function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('addUser','login');
+        
+    }
+    
+    
+    
+    function login(){
+      $this->autoRender = false; 
+       if ($this->request->is('post')) {
+           $data = file_get_contents("php://input");
+           $data = json_decode($data, TRUE); 
+           $data['password'] = $this->Auth->password($data['password']);           
+        if ($this->Auth->login($data)) {  
+            return json_encode(array('message' => 'You have been logged In!'));
+        } else {
+            return false;
+         }
+       } else { 
+           return false;
+       } 
+       
+    }
+    
+    
     
     function addUser(){
-        $this->autoRender = false;        
+        $this->autoRender = false;
         if($this->request->is('post','put')){
            $data = file_get_contents("php://input");
            $data = json_decode($data, TRUE);
+           if(count($data) > 0){
+           $data['password'] = $this->Auth->password($data['password']);
            $this->User->save($data);
+           } else {
+               return false;
+           }
         }
     }
     
@@ -60,7 +94,7 @@ class UsersController extends AppController {
         if ($this->request->is('get')) {
             $usersList = $this->User->find('all');
             $cnt = count($usersList);
-            if ($cnt!=0) {
+            if ($cnt > 0) {
                // return $cnt == 1 ? json_encode(array($usersList)) : json_encode($usersList);               
                 return json_encode($usersList);
             } else {
