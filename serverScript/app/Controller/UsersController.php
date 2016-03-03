@@ -45,8 +45,8 @@ class UsersController extends AppController {
         if($loginToken!='' && $loginToken!=null && ($this->Session->read('userLoginToken')!=''  && $this->Session->read('userLoginToken')==$loginToken)){ 
                     return true;
         } else {
-                if($this->Session->read('userLoginToken')==''){
-                    
+                if($this->Session->read('userLoginToken')=='' || $loginToken=='' || $loginToken==null){
+                    $this->sessionExpire();
                 }
         }
     }
@@ -60,7 +60,6 @@ class UsersController extends AppController {
     
     function userLogin(){ 
         $this->autoRender = false;
-        return;
         $data = array();
         $userDetail = array();
         if($this->request->is('post')){
@@ -88,7 +87,7 @@ class UsersController extends AppController {
                                 )
                         );
             } else {
-                return json_encode(array('message'=>array('error'=>'Incorrect username or password!')));
+                return json_encode(array('message'=>array('error'=>'<strong>Incorrect username or password!</strong>')));
             }
         }        
     }
@@ -107,7 +106,23 @@ class UsersController extends AppController {
        return json_encode(array('message'=>array('logout'=>'Successfully Logged Out!')));
     }
     
+    /**
+     * 
+     * 
+     * 
+     */
     
+    function sessionExpire(){
+      $this->autoRender = false; 
+       $this->Session->write('userLoginToken','');
+       return json_encode(array('message'=>array('sessionExpire'=>'Your session has been expired!')));
+    }
+    
+     /**
+     * 
+     * 
+     * 
+     */
     
     
     function addUser(){
@@ -137,10 +152,10 @@ class UsersController extends AppController {
             $usersList = $this->User->find('all');
             $cnt = count($usersList);
             if ($cnt > 0) {
-               // return $cnt == 1 ? json_encode(array($usersList)) : json_encode($usersList);               
+               // return $cnt == 1 ? json_encode(array($usersList)) : json_encode($usersList);                
                 return json_encode($usersList);
             } else {
-                return false;
+                return json_encode(array('message'=>array('error'=>'<strong>No data available.</strong>')));;
             }
         }
     }

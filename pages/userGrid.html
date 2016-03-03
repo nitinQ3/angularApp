@@ -16,7 +16,7 @@
         <div class="col-md-2">{{user.User.role | uppercase}}</div>
         <div class="col-md-2">
 <!--            <a href="#userInfo/{{user.User.id}}" ng-click="userDetail({{user.User.id}})"><span  class="glyphicon glyphicon-pencil" ></span></a>-->
-            <a ng-href='#/userInfo/{{user.User.id}}' ng-click="userDetail(user.User.id)"> <span  class="glyphicon glyphicon-user" ></span> </a>
+            <a ng-href='#/userInfo/{{user.User.id}}'> <span  class="glyphicon glyphicon-user" ></span> </a>
         </div>
  </div>
 <div  ng-bind-html="noData | unsafe" ng-show="noData"  class="alert alert-danger"></div>
