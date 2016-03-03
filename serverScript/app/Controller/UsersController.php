@@ -33,7 +33,67 @@ App::uses('Controller', 'Controller');
 class UsersController extends AppController {  
     
     
-    var $components = array('Auth');
+    /**
+     * 
+     * 
+     * 
+     */
+    
+    function beforeFilter($loginToken=null) {
+        parent::beforeFilter();
+        //$this->Auth->allow('login');
+        if($loginToken!='' && $loginToken!=null && ($this->Session->read('userLoginToken')!=''  && $this->Session->read('userLoginToken')==$loginToken)){ 
+                    return true;
+        } else {
+                if($this->Session->read('userLoginToken')==''){
+                    
+                }
+        }
+    }
+    
+     /**
+     * 
+     * 
+     * 
+     */
+    
+    
+    function userLogin(){ 
+        $this->autoRender = false;
+        return;
+        $data = array();
+        $userDetail = array();
+        if($this->request->is('post')){
+            $data = file_get_contents("php://input");
+            $data = json_decode($data, TRUE);
+            $data['password'] = md5($data['password']);
+            $userDetail = $this->User->find('all',array(
+                                'fields'=>array(
+                                      'id','username'
+                                    ),
+                                'conditions'=>array(
+                                  'username' => $data['username'],
+                                  'password' => $data['password']
+                                )
+                         )
+                    );
+            if(count($userDetail) > 0){
+                $this->Session->write('userLoginToken',base64_encode($userDetail[0]['User']['id']));
+                return json_encode(
+                            array(
+                                  'message'=>array(
+                                        'success'=>'Successfully Logged In!'
+                                         ),
+                                  'userLoginToken'=>  base64_encode($userDetail[0]['User']['id'])
+                                )
+                        );
+            } else {
+                return json_encode(array('message'=>array('error'=>'Incorrect username or password!')));
+            }
+        }        
+    }
+    
+    
     
     /**
      * 
@@ -41,30 +101,12 @@ class UsersController extends AppController {
      * 
      */
     
-    function beforeFilter() {
-        parent::beforeFilter();
-        $this->Auth->allow('addUser','login');
-        
-    }
-    
-    
-    
-    function login(){
+    function logout(){
       $this->autoRender = false; 
-       if ($this->request->is('post')) {
-           $data = file_get_contents("php://input");
-           $data = json_decode($data, TRUE); 
-           $data['password'] = $this->Auth->password($data['password']);           
-        if ($this->Auth->login($data)) {  
-            return json_encode(array('message' => 'You have been logged In!'));
-        } else {
-            return false;
-         }
-       } else { 
-           return false;
-       } 
-       
+       $this->Session->write('userLoginToken','');
+       return json_encode(array('message'=>array('logout'=>'Successfully Logged Out!')));
     }
+    
     
     
     
@@ -74,7 +116,7 @@ class UsersController extends AppController {
            $data = file_get_contents("php://input");
            $data = json_decode($data, TRUE);
            if(count($data) > 0){
-           $data['password'] = $this->Auth->password($data['password']);
+           $data['password'] = md5($data['password']);
            $this->User->save($data);
            } else {
                return false;
