@@ -39,16 +39,9 @@ class UsersController extends AppController {
      * 
      */
     
-    function beforeFilter($loginToken=null) {
-        parent::beforeFilter();
-        //$this->Auth->allow('login');
-        if($loginToken!='' && $loginToken!=null && ($this->Session->read('userLoginToken')!=''  && $this->Session->read('userLoginToken')==$loginToken)){ 
-                    return true;
-        } else {
-                if($this->Session->read('userLoginToken')=='' || $loginToken=='' || $loginToken==null){
-                    $this->sessionExpire();
-                }
-        }
+    function beforeFilter() { 
+        parent::beforeFilter();        
+        //echo $this->Session->read('userLoginToken'); return false;       
     }
     
      /**
@@ -62,7 +55,7 @@ class UsersController extends AppController {
         $this->autoRender = false;
         $data = array();
         $userDetail = array();
-        if($this->request->is('post')){
+        if($this->request->is('post')){ 
             $data = file_get_contents("php://input");
             $data = json_decode($data, TRUE);
             $data['password'] = md5($data['password']);
@@ -101,9 +94,11 @@ class UsersController extends AppController {
      */
     
     function logout(){
-      $this->autoRender = false; 
-       $this->Session->write('userLoginToken','');
-       return json_encode(array('message'=>array('logout'=>'Successfully Logged Out!')));
+      $this->autoRender = false;
+      //$this->response->send();
+      //$this->_stop();      
+      $this->Session->write('userLoginToken','');      
+      return json_encode(array('message'=>array('logout'=>'Successfully Logged Out!')));
     }
     
     /**
@@ -113,8 +108,8 @@ class UsersController extends AppController {
      */
     
     function sessionExpire(){
-      $this->autoRender = false; 
-       $this->Session->write('userLoginToken','');
+      $this->autoRender = false;       
+       $this->Session->delete('userLoginToken');
        return json_encode(array('message'=>array('sessionExpire'=>'Your session has been expired!')));
     }
     
@@ -125,7 +120,7 @@ class UsersController extends AppController {
      */
     
     
-    function addUser(){
+    function addUser(){ 
         $this->autoRender = false;
         if($this->request->is('post','put')){
            $data = file_get_contents("php://input");
@@ -133,10 +128,11 @@ class UsersController extends AppController {
            if(count($data) > 0){
            $data['password'] = md5($data['password']);
            $this->User->save($data);
+               return json_encode(array('message'=>array('success'=>'<strong>Success!</strong> User has been added.')));
            } else {
-               return false;
+               return json_encode(array('message'=>array('error'=>'<strong>Oops!</strong> Something went wrong.')));
            }
-        }
+        } 
     }
     
     /**
@@ -148,7 +144,9 @@ class UsersController extends AppController {
     function userList() {
         $this->autoRender = false;
         $usersList = array();
-        if ($this->request->is('get')) {
+        $userLoginToken = isset($this->request->params['pass'][0])?$this->request->params['pass'][0]:'';
+        
+        if ($this->request->is('get') &&  $this->Session->read('userLoginToken')!='' && $this->Session->read('userLoginToken')== $userLoginToken) {
             $usersList = $this->User->find('all');
             $cnt = count($usersList);
             if ($cnt > 0) {
@@ -157,6 +155,8 @@ class UsersController extends AppController {
             } else {
                 return json_encode(array('message'=>array('error'=>'<strong>No data available.</strong>')));;
             }
+        } else {
+            echo $this->sessionExpire();
         }
     }
     
@@ -166,10 +166,12 @@ class UsersController extends AppController {
      * 
      */
     
-    function userDetail($id = NULL) {
+    function userDetail() {
         $this->autoRender = false;
         $usersDetail = array();
-        if ($this->request->is('GET') && $id!=null) {
+        $id = isset($this->request->params['pass'][1])?$this->request->params['pass'][1]:'';
+        $userLoginToken = isset($this->request->params['pass'][0])?$this->request->params['pass'][0]:'';
+        if ($this->request->is('GET') && $id!='' &&  $this->Session->read('userLoginToken')!='' && $this->Session->read('userLoginToken')== $userLoginToken) {
             $usersDetail = $this->User->findById($id);
             $cnt = count($usersDetail);
             if ($cnt) {
@@ -178,7 +180,7 @@ class UsersController extends AppController {
                 return false;
             }
         } else {
-            return false;
+            echo $this->sessionExpire();
         }
     }
 
