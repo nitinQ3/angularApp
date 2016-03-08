@@ -172,12 +172,11 @@ class UsersController extends AppController {
         $id = isset($this->request->params['pass'][1])?$this->request->params['pass'][1]:'';
         $userLoginToken = isset($this->request->params['pass'][0])?$this->request->params['pass'][0]:'';
         if ($this->request->is('GET') && $id!='' &&  $this->Session->read('userLoginToken')!='' && $this->Session->read('userLoginToken')== $userLoginToken) {
-            $usersDetail = $this->User->findById($id);
-            $cnt = count($usersDetail);
-            if ($cnt) {
-                return $cnt == 1 ? json_encode(array($usersDetail)) : json_encode($usersDetail);
+            $usersDetail = $this->User->findById($id);            
+            if (count($usersDetail) > 0) {
+                return json_encode(array($usersDetail));
             } else {
-                return false;
+                return json_encode(array('message'=>array('error'=>'<strong>No data found :( </strong>')));
             }
         } else {
             echo $this->sessionExpire();
